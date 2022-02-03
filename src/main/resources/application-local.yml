@@ -11,10 +11,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-  main:
-    banner-mode: off
-
-task.template.allowMultipleTasks: false
-
 
 
