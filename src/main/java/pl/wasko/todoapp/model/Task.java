@@ -14,20 +14,10 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "tasks")
-public class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    private int id;
-    @NotBlank(message = "Task's description must not be empty")
-    private String description;
-    private boolean done;
+public class Task extends TaskSuperClass{
+
     @Column()
     private LocalDateTime deadline;
-
-//    @AttributeOverrides({
-//            @AttributeOverride(column = @Column(name = "updateOn"), name = "updatedOn")
-//    })
 
     @Embedded
     private BaseAuditableEntity audit = new BaseAuditableEntity();

@@ -15,19 +15,12 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Table(name = "task_groups")
-public class TaskGroup {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    private int id;
-    @NotBlank(message = "Task group's description must not be empty")
-    private String description;
-    private boolean done;
-//    @Embedded
-//    private BaseAuditableEntity audit = new BaseAuditableEntity();
+public class TaskGroup extends TaskSuperClass{
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "group")
     @Getter(AccessLevel.PACKAGE)
     @Setter(AccessLevel.PACKAGE)
     private Set<Task> tasks;
-
+    @ManyToOne
+    @JoinColumn(name="project_id")
+    private Project project;
 }
