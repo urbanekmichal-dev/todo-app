@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.wasko.todoapp.model.Task;
 import pl.wasko.todoapp.model.TaskRepository;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -39,10 +40,24 @@ public class TaskController {
         if (!taskRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        toUpdate.setId(id);
-        taskRepository.save(toUpdate);
+
+        taskRepository.findById(id).ifPresent(task->{task.updateFrom(toUpdate);
+            taskRepository.save(task);
+        });
         return ResponseEntity.noContent().build();
     }
+    @Transactional
+    @RequestMapping(method = RequestMethod.PATCH, value = "/tasks/{id}")
+    public ResponseEntity<?> toggleTask(@PathVariable int id) {
+        if (!taskRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+      taskRepository.findById(id).ifPresent(task->task.setDone(!task.isDone()));
+
+        //throw new RuntimeException();
+       return ResponseEntity.noContent().build();
+    }
+
 
     @RequestMapping(method = RequestMethod.GET, value = "/tasks/{id}")
     ResponseEntity<Task> getTask(@PathVariable int id) {
