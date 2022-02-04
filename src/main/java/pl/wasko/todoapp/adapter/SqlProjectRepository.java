@@ -8,10 +8,12 @@ import pl.wasko.todoapp.model.ProjectRepository;
 import pl.wasko.todoapp.model.TaskGroup;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SqlProjectRepository extends ProjectRepository,JpaRepository<Project,Integer> {
     @Override
     @Query("from Project p join fetch p.projectSteps")
     List<Project> findAll();
+
 }
