@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Embeddable;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@MappedSuperclass
-abstract public class BaseAuditableEntity {
+@Embeddable
+public class BaseAuditableEntity {
 
     private LocalDateTime createdOn;
 

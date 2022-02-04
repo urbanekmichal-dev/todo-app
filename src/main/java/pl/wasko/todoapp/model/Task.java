@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "tasks")
-public class Task extends BaseAuditableEntity{
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
@@ -25,11 +25,22 @@ public class Task extends BaseAuditableEntity{
     @Column()
     private LocalDateTime deadline;
 
+//    @AttributeOverrides({
+//            @AttributeOverride(column = @Column(name = "updateOn"), name = "updatedOn")
+//    })
+
+    @Embedded
+    private BaseAuditableEntity audit = new BaseAuditableEntity();
+    @ManyToOne
+    @JoinColumn(name = "task_group_id")
+    @Getter(AccessLevel.PACKAGE)
+    private TaskGroup group;
 
     public void updateFrom(final Task source){
         this.description=source.description;
         this.done=source.done;
         this.deadline=source.deadline;
+        this.group=source.group;
     }
 
 }
