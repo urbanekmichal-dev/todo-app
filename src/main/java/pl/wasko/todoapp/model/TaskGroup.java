@@ -23,4 +23,6 @@ public class TaskGroup extends TaskSuperClass{
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
+
+
 }

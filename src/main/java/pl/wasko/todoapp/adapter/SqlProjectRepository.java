@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface SqlProjectRepository extends ProjectRepository,JpaRepository<Project,Integer> {
     @Override
-    @Query("from Project p join fetch p.projectSteps")
+    @Query("select distinct p from Project p join fetch p.projectSteps")
     List<Project> findAll();
 
 }
