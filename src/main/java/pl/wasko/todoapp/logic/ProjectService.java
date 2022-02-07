@@ -3,10 +3,7 @@ package pl.wasko.todoapp.logic;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wasko.todoapp.TaskConfigurationProperties;
-import pl.wasko.todoapp.model.Project;
-import pl.wasko.todoapp.model.ProjectRepository;
-import pl.wasko.todoapp.model.TaskGroup;
-import pl.wasko.todoapp.model.TaskGroupRepository;
+import pl.wasko.todoapp.model.*;
 import pl.wasko.todoapp.model.projection.GroupReadModel;
 import pl.wasko.todoapp.model.projection.ProjectReadModel;
 import pl.wasko.todoapp.model.projection.ProjectWriteModel;
@@ -32,12 +29,19 @@ public class ProjectService {
     }
 
     public GroupReadModel createGroup (int projectId, LocalDateTime deadline) throws Exception {
-        Project project = projectRepository.findById(projectId).orElseThrow(()-> new RuntimeException("Project with id "+projectId+" was not found"));
-        TaskGroup taskGroup = new TaskGroup();
-        taskGroup.setDescription(project.getDescription());
-        taskGroup.setDone(false);
-        taskGroup.setProject(project);
+    if(!taskConfigurationProperties.getTemplate().isAllowMultipleTasks() && taskGroupRepository.existsByDoneIsFalseAndProject_Id(projectId)){
+        throw new IllegalStateException("Only one undone group fom project is allowed");
+    }
+       TaskGroup taskGroup= projectRepository.findById(projectId).map(project -> {
+            var result = new TaskGroup();
+            result.setDescription(project.getDescription());
+            result.setTasks(project.getProjectSteps().stream()
+                    .map(step ->
+                    new Task(step.getDescription(), deadline.plusDays(step.getDaysToDeadline())))
+                    .collect(Collectors.toSet()));
+            return result;
 
-
+        }).orElseThrow(()->new IllegalArgumentException("Project with given id not found"));
+    return new GroupReadModel(taskGroup);
     }
 }
