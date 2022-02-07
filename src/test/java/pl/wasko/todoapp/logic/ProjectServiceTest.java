@@ -8,6 +8,7 @@ import pl.wasko.todoapp.model.Task;
 import pl.wasko.todoapp.model.TaskGroup;
 import pl.wasko.todoapp.model.TaskGroupRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,20 +84,31 @@ class ProjectServiceTest {
     @DisplayName("should create a new group from project")
     void createGroup_configurationOk_existingProject_createsAndSavesGroup(){
         //given
+        var today = LocalDate.now().atStartOfDay();
         var mockRepository = mock(ProjectRepository.class);
         when(mockRepository.findById(anyInt())).thenReturn(Optional.empty());
         //and
         TaskConfigurationProperties mocProperties = mockConfiguration(true);
-
+        InMemoryGroupRepository inMemoryGroupRepo = inMemoryGroupRepository();
+        int countBeforeCall = inMemoryGroupRepo.count();
+        //system under test
+        var toTest = new ProjectService(mockRepository, inMemoryGroupRepository(),mocProperties);
         //when
-
+        toTest.createGroup(1,today);
         //then
+        assertThat(countBeforeCall+1)
     }
 
-    private TaskGroupRepository inMemoryGroupRepository(){
-    new TaskGroupRepository(){
+    private InMemoryGroupRepository inMemoryGroupRepository(){ return new InMemoryGroupRepository();}
+
+    private static class InMemoryGroupRepository implements TaskGroupRepository {
+
         private Map<Integer, TaskGroup> map = new HashMap<>();
         private int index = 0;
+
+        public int count(){
+            return map.values().size();
+        }
 
         @Override
         public List<TaskGroup> findAll() {
@@ -109,21 +121,27 @@ class ProjectServiceTest {
         }
 
         @Override
-        public TaskGroup save(TaskGroup entity) {
-            if(entity.getId()!=0){
-                map.put(entity.getId(),entity);
-            } else {
-                map.put(++index,entity);
+        public TaskGroup save(final TaskGroup entity) {
+            if (entity.getId() == 0) {
+                try {
+                    TaskGroup.class.getDeclaredField("id").set(entity, ++index);
+
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
-            return null;
+            map.put(entity.getId(), entity);
+            return entity;
         }
 
         @Override
         public boolean existsByDoneIsFalseAndProject_Id(Integer projectId) {
-            return false;
+            return map.values().stream().filter(group -> !group.isDone()).
+                    anyMatch(group -> group.getProject() != null && group.getProject().getId() == projectId);
         }
     }
-    }
+
 
 
     private TaskGroupRepository groupRepositoryReturning(final boolean result) {
