@@ -17,8 +17,6 @@ import java.util.Set;
 @Table(name = "task_groups")
 public class TaskGroup extends TaskSuperClass{
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "group")
-    @Getter(AccessLevel.PACKAGE)
-    @Setter(AccessLevel.PACKAGE)
     private Set<Task> tasks;
     @ManyToOne
     @JoinColumn(name="project_id")
