@@ -28,9 +28,9 @@ public class ProjectService {
         return new ProjectReadModel(project);
     }
 
-    public GroupReadModel createGroup (int projectId, LocalDateTime deadline) throws Exception {
+    public GroupReadModel createGroup (int projectId, LocalDateTime deadline) throws IllegalStateException  {
     if(!taskConfigurationProperties.getTemplate().isAllowMultipleTasks() && taskGroupRepository.existsByDoneIsFalseAndProject_Id(projectId)){
-        throw new IllegalStateException("Only one undone group fom project is allowed");
+        throw new IllegalStateException("Only one undone group from project is allowed");
     }
        TaskGroup taskGroup= projectRepository.findById(projectId).map(project -> {
             var result = new TaskGroup();
