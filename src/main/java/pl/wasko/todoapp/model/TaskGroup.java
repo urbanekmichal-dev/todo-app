@@ -16,11 +16,12 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "task_groups")
 public class TaskGroup extends TaskSuperClass{
+    private int id;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "group")
-    @Getter(AccessLevel.PACKAGE)
-    @Setter(AccessLevel.PACKAGE)
     private Set<Task> tasks;
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
+
+
 }

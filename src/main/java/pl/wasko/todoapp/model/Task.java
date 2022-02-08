@@ -33,4 +33,10 @@ public class Task extends TaskSuperClass{
         this.group=source.group;
     }
 
+    public Task(String description, LocalDateTime deadline) {
+        this.description = description;
+        this.deadline = deadline;
+
+    }
+
 }

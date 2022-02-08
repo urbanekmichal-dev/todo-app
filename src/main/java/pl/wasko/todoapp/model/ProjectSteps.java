@@ -1,6 +1,7 @@
 package pl.wasko.todoapp.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "project_steps")
 public class ProjectSteps {
     @Id
@@ -22,4 +24,10 @@ public class ProjectSteps {
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
+
+    public ProjectSteps(String description, int daysToDeadline){
+        this.description = description;
+        this.daysToDeadline = daysToDeadline;
+    }
+
 }
