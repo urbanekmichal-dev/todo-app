@@ -16,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "task_groups")
 public class TaskGroup extends TaskSuperClass{
+    private int id;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "group")
     private Set<Task> tasks;
     @ManyToOne

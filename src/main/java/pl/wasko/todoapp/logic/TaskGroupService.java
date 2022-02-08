@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 @RequestScope
 public class TaskGroupService {
         private final TaskGroupRepository repository;
-        private final TaskRepository taskRepository;
-        private final TaskConfigurationProperties config;
 
         public GroupReadModel createGroup(GroupWriteModel source){
              TaskGroup result =  repository.save(source.toGroup());
