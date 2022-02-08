@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class TaskGroupServiceTest {
 
     @Test
-    @DisplayName("should throw IllegalStateException when exists by done is false return true")
-    void toggleGroup_existByDoneIsFalseReturnTrue_Test() {
+    @DisplayName("should throw when undone tasks")
+    void toggleGroup_undoneTasks_throwsIllegalStateException() {
         //given
         TaskGroupRepository mockTaskGroupRepository = getTaskGroupRepository(true);
         var toTest = new TaskGroupService(mockTaskGroupRepository);
@@ -34,8 +34,8 @@ class TaskGroupServiceTest {
     }
 
     @Test
-    @DisplayName("should throw IllegalArgumentException when find by id return empty optional")
-    void toggleGroup_findByIdReturnEmptyOptional_Test() {
+    @DisplayName("should throw when no group")
+    void toggleGroup_wrongId_throwsIllegalArgumentException() {
         //given
         TaskGroupRepository mockTaskGroupRepository = getTaskGroupRepository(false);
         when(mockTaskGroupRepository.findById(anyInt())).thenReturn(Optional.empty());
@@ -55,23 +55,21 @@ class TaskGroupServiceTest {
         //TaskGroupRepository mockTaskGroupRepository = getTaskGroupRepository(false);
         InMemoryTaskGroupRepository memoryTaskGroupRepository = inMemoryTaskGroupRepository();
 
-        TaskGroup mockTaskGroup = mock(TaskGroup.class);
-        when(mockTaskGroup.isDone()).thenReturn(true);
-        when(mockTaskGroup.getId()).thenReturn(0);
+        TaskGroup taskGroup = new TaskGroup();
+        taskGroup.setId(0);
+        taskGroup.setDone(true);
 
-        inMemoryTaskGroupRepository().save(mockTaskGroup);
-
-
+        memoryTaskGroupRepository.save(taskGroup);
 
         var toTest = new TaskGroupService(memoryTaskGroupRepository);
 
         //when
-       toTest.toggleGroup(0);
+       toTest.toggleGroup(1);
         //then
-        var result = inMemoryTaskGroupRepository().findById(0);
+        memoryTaskGroupRepository.findById(1);
 
 
-        assertThat(result.get().isDone()).isEqualTo(false);
+        assertThat(memoryTaskGroupRepository.findById(1).get().isDone()).isEqualTo(false);
     }
     private InMemoryTaskGroupRepository inMemoryTaskGroupRepository(){
         return new InMemoryTaskGroupRepository();
