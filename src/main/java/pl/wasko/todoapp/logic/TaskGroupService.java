@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Service
 @RequestScope
 public class TaskGroupService {
         private final TaskGroupRepository repository;
