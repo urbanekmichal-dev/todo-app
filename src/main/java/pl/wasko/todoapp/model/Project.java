@@ -1,6 +1,7 @@
 package pl.wasko.todoapp.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "projects")
 public class Project {
     @Id
@@ -21,4 +23,10 @@ public class Project {
     private Set<ProjectSteps> projectSteps;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
     private Set<TaskGroup> taskGroups;
+
+    public Project(String description, Set<ProjectSteps> projectSteps, Set<TaskGroup> taskGroups) {
+        this.description = description;
+        this.projectSteps = projectSteps;
+        this.taskGroups = taskGroups;
+    }
 }

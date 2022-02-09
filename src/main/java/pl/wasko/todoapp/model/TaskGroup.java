@@ -23,5 +23,8 @@ public class TaskGroup extends TaskSuperClass{
     @JoinColumn(name="project_id")
     private Project project;
 
-
+    public TaskGroup(Set<Task> tasks, Project project) {
+        this.tasks = tasks;
+        this.project = project;
+    }
 }
