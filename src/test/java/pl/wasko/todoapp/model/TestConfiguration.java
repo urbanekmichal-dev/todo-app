@@ -47,9 +47,30 @@ public class TestConfiguration {
                 return Optional.ofNullable(tasks.get(id));
             }
 
+//            @Override
+//            public Task save(Task entity) {
+//                int key = tasks.size()+1;
+//                tasks.put(key,entity);
+//                return tasks.get(key);
+//
+//            }
+
             @Override
             public Task save(Task entity) {
-                return tasks.put(tasks.size()+1,entity);
+                int key = tasks.size()+1;
+                if (entity.getId() == 0) {
+                    try {
+                        var field = TaskSuperClass.class.getDeclaredField("id");
+                        field.setAccessible(true);
+                        field.set(entity,key);
+
+                    } catch (NoSuchFieldException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+                tasks.put(entity.getId(), entity);
+                return tasks.get(key);
             }
 
             @Override

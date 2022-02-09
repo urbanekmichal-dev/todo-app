@@ -38,5 +38,12 @@ public class Task extends TaskSuperClass{
         this.deadline = deadline;
 
     }
+    public Task(String description, LocalDateTime deadline,TaskGroup taskGroup ) {
+        this(description,deadline);
+        if(taskGroup!=null){
+            this.group = taskGroup;
+        }
+
+    }
 
 }
