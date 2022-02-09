@@ -11,6 +11,7 @@ import pl.wasko.todoapp.model.TaskGroup;
 import pl.wasko.todoapp.model.TaskGroupRepository;
 import pl.wasko.todoapp.model.TaskRepository;
 import pl.wasko.todoapp.model.projection.GroupReadModel;
+import pl.wasko.todoapp.model.projection.GroupTaskReadModel;
 import pl.wasko.todoapp.model.projection.GroupWriteModel;
 
 import java.util.List;
@@ -38,4 +39,9 @@ public class TaskGroupService {
                 result.setDone(!result.isDone());
                 repository.save(result);
         }
+
+//        public List<GroupTaskReadModel> readTasksFromGroup(int id){
+//                return repository.findAllById(id).stream().map(ReadMode::new).collect(Collectors.toList());
+//
+//        }
 }

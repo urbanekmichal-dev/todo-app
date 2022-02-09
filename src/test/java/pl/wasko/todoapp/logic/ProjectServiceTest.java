@@ -169,6 +169,11 @@ class ProjectServiceTest {
             return map.values().stream().filter(group -> !group.isDone()).
                     anyMatch(group -> group.getProject() != null && group.getProject().getId() == projectId);
         }
+
+        @Override
+        public List<Task> findAllById(Integer id) {
+            return null;
+        }
     }
 
 

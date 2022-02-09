@@ -2,6 +2,7 @@ package pl.wasko.todoapp.logic;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.wasko.todoapp.model.Task;
 import pl.wasko.todoapp.model.TaskGroup;
 import pl.wasko.todoapp.model.TaskGroupRepository;
 import pl.wasko.todoapp.model.TaskRepository;
@@ -109,6 +110,11 @@ class TaskGroupServiceTest {
         @Override
         public boolean existsByDoneIsFalseAndProject_Id(Integer projectId) {
             return false;
+        }
+
+        @Override
+        public List<Task> findAllById(Integer id) {
+            return null;
         }
     }
 
