@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import pl.wasko.todoapp.model.Task;
 import pl.wasko.todoapp.model.TaskRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository()
@@ -20,4 +21,5 @@ import java.util.List;
  @Override
  boolean existsByDoneIsFalseAndGroup_Id(Integer groupId);
 
+ List<Task> findAllByDoneIsFalseAndDeadlineIsBeforeOrDeadlineIsNull(LocalDateTime today);
 }

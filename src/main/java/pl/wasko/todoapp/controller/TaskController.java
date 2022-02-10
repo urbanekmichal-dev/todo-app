@@ -14,6 +14,7 @@ import pl.wasko.todoapp.model.TaskRepository;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -80,9 +81,9 @@ public class TaskController {
         return ResponseEntity.ok(taskRepository.findByDone(state));
     }
 
-//    @GetMapping("/today")
-//    ResponseEntity<List<Task>> readTasksForToday(){
-//        return ResponseEntity.ok(taskRepository.);
-//    }
+    @GetMapping("/today")
+    ResponseEntity<List<Task>> readTasksForToday(){
+        return ResponseEntity.ok(taskRepository.findAllByDoneIsFalseAndDeadlineIsBeforeOrDeadlineIsNull(LocalDateTime.now()));
+    }
 
 }

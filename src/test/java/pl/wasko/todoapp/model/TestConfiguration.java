@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Configuration
@@ -86,6 +87,11 @@ public class TestConfiguration {
             @Override
             public boolean existsByDoneIsFalseAndGroup_Id(Integer groupId) {
                 return false;
+            }
+
+            @Override
+            public List<Task> findAllByDoneIsFalseAndDeadlineIsBeforeOrDeadlineIsNull(LocalDateTime today) {
+                return null;
             }
         };
     }
