@@ -24,9 +24,9 @@ public class TaskGroupController {
 
 
     @PostMapping("")
-    ResponseEntity<GroupReadModel> addGroup(GroupWriteModel model){
+    ResponseEntity<GroupReadModel> addGroup(@RequestBody GroupWriteModel model){
         GroupReadModel groupReadModel= taskGroupService.createGroup(model);
-        return ResponseEntity.created(URI.create("/")).body(groupReadModel);
+        return ResponseEntity.created(URI.create("/"+groupReadModel.getId())).body(groupReadModel);
     }
 
     @GetMapping("")
@@ -34,15 +34,15 @@ public class TaskGroupController {
         return ResponseEntity.ok(taskGroupService.readAll());
     }
 
-    @PatchMapping("/id")
+    @PatchMapping("/{id}")
     ResponseEntity<?> toggleGroup(@PathVariable int id){
         taskGroupService.toggleGroup(id);
-        return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}/tasks")
     ResponseEntity<List<GroupTaskReadModel>> getTasksFromGroup(@PathVariable int id){
-        return ResponseEntity.ok(taskGroupService.readAll());
+        return ResponseEntity.ok(taskGroupService.readTasksFromGroup(id));
     }
 
 }

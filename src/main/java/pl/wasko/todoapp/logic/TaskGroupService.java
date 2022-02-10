@@ -40,8 +40,8 @@ public class TaskGroupService {
                 repository.save(result);
         }
 
-//        public List<GroupTaskReadModel> readTasksFromGroup(int id){
-//                return repository.findAllById(id).stream().map(ReadMode::new).collect(Collectors.toList());
-//
-//        }
+        public List<GroupTaskReadModel> readTasksFromGroup(int id){
+                return repository.findAllById(id).stream().map(GroupTaskReadModel::new).collect(Collectors.toList());
+
+        }
 }

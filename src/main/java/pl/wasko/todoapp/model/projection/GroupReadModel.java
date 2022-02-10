@@ -13,14 +13,21 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class GroupReadModel {
+    private int id;
     private String description;
     private LocalDateTime deadline;
     private Set<GroupTaskReadModel> tasks;
 
     public GroupReadModel(TaskGroup source)
     {
+        id= source.getId();
         description =source.getDescription();
-        source.getTasks().stream().map(Task::getDeadline).max(LocalDateTime::compareTo).ifPresent(date -> deadline =date);
-        tasks = source.getTasks().stream().map(GroupTaskReadModel::new).collect(Collectors.toSet());
+        source.getTasks().stream().
+                map(Task::getDeadline).
+                max(LocalDateTime::compareTo).
+                ifPresent(date -> deadline =date);
+        tasks = source.getTasks().stream().
+                map(GroupTaskReadModel::new).
+                collect(Collectors.toSet());
     }
 }

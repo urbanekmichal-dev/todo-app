@@ -57,7 +57,7 @@ class TaskGroupServiceTest {
         InMemoryTaskGroupRepository memoryTaskGroupRepository = inMemoryTaskGroupRepository();
 
         TaskGroup taskGroup = new TaskGroup();
-        taskGroup.setId(0);
+        //taskGroup.setId(0);
         taskGroup.setDone(true);
 
         memoryTaskGroupRepository.save(taskGroup);

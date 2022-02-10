@@ -14,7 +14,15 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "tasks")
-public class Task extends TaskSuperClass{
+public class Task {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
+    private int id;
+    @NotBlank(message = "Task's description must not be empty")
+    protected String description;
+    protected boolean done;
 
     @Column()
     private LocalDateTime deadline;

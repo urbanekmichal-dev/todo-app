@@ -8,5 +8,5 @@ public interface TaskGroupRepository {
     Optional<TaskGroup> findById(Integer id);
     TaskGroup save(TaskGroup entity);
     boolean existsByDoneIsFalseAndProject_Id(Integer projectId);
-    List<Task> findAllById(Integer id);
+    List<Task> findAllById(Integer groupId);
 }
