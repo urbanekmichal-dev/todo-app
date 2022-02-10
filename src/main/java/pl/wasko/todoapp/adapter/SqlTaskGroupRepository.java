@@ -21,5 +21,6 @@ public interface SqlTaskGroupRepository extends TaskGroupRepository, JpaReposito
     @Override
    List<Task> findAllById(Integer groupId);
 
-
+    @Override
+    boolean existsByDoneIsFalseAndGroup_Id(Integer id);
 }

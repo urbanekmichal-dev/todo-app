@@ -113,6 +113,11 @@ class TaskGroupServiceTest {
         }
 
         @Override
+        public boolean existsByDoneIsFalseAndGroup_Id(Integer id) {
+            return false;
+        }
+
+        @Override
         public List<Task> findAllById(Integer id) {
             return null;
         }
