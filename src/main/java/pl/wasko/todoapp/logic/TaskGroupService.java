@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @RequestScope
 public class TaskGroupService {
         private final TaskGroupRepository repository;
+        private final TaskRepository taskRepository;
 
         public GroupReadModel createGroup(GroupWriteModel source){
              TaskGroup result =  repository.save(source.toGroup());
@@ -32,7 +33,7 @@ public class TaskGroupService {
         }
 
         public void toggleGroup(int groupId){
-                if(repository.existsByDoneIsFalseAndGroup_Id(groupId)){
+                if(taskRepository.existsByDoneIsFalseAndGroup_Id(groupId)){//TODO: Something doesn't work
                         throw new IllegalStateException("Group has undone tasks. Done all the tasks first");
                 }
                 TaskGroup result =  repository.findById(groupId).orElseThrow(()-> new IllegalArgumentException("TaskGroup with given id not found"));
@@ -42,6 +43,5 @@ public class TaskGroupService {
 
         public List<GroupTaskReadModel> readTasksFromGroup(int id){
                 return repository.findAllById(id).stream().map(GroupTaskReadModel::new).collect(Collectors.toList());
-
         }
 }

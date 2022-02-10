@@ -27,11 +27,20 @@ class TaskGroupServiceTest {
     void toggleGroup_undoneTasks_throwsIllegalStateException() {
         //given
         TaskGroupRepository mockTaskGroupRepository = getTaskGroupRepository(true);
-        var toTest = new TaskGroupService(mockTaskGroupRepository);
+
+        TaskRepository mockTaskRepository = getTaskRepository(true);
+
+        var toTest = new TaskGroupService(mockTaskGroupRepository,mockTaskRepository);
         //when
         var exception = catchThrowable(() -> toTest.toggleGroup(1));
         //then
         assertThat(exception).isInstanceOf(IllegalStateException.class).hasMessageContaining("Group has undone tasks");
+    }
+
+    private TaskRepository getTaskRepository(boolean state) {
+        TaskRepository mockTaskRepository = mock(TaskRepository.class);
+        when(mockTaskRepository.existsByDoneIsFalseAndGroup_Id(anyInt())).thenReturn(state);
+        return mockTaskRepository;
     }
 
     @Test
@@ -40,7 +49,9 @@ class TaskGroupServiceTest {
         //given
         TaskGroupRepository mockTaskGroupRepository = getTaskGroupRepository(false);
         when(mockTaskGroupRepository.findById(anyInt())).thenReturn(Optional.empty());
-        var toTest = new TaskGroupService(mockTaskGroupRepository);
+
+        TaskRepository mockTaskRepository = getTaskRepository(false);
+        var toTest = new TaskGroupService(mockTaskGroupRepository,mockTaskRepository);
 
         //when
         var exception = catchThrowable(() -> toTest.toggleGroup(1));
@@ -55,14 +66,14 @@ class TaskGroupServiceTest {
 
         //TaskGroupRepository mockTaskGroupRepository = getTaskGroupRepository(false);
         InMemoryTaskGroupRepository memoryTaskGroupRepository = inMemoryTaskGroupRepository();
-
+        TaskRepository mockTaskRepository = getTaskRepository(false);
         TaskGroup taskGroup = new TaskGroup();
         //taskGroup.setId(0);
         taskGroup.setDone(true);
 
         memoryTaskGroupRepository.save(taskGroup);
 
-        var toTest = new TaskGroupService(memoryTaskGroupRepository);
+        var toTest = new TaskGroupService(memoryTaskGroupRepository,mockTaskRepository);
 
         //when
        toTest.toggleGroup(1);
@@ -78,7 +89,7 @@ class TaskGroupServiceTest {
 
     private static class InMemoryTaskGroupRepository implements TaskGroupRepository{
 
-        private Map<Integer, TaskGroup> map = new HashMap<>();
+        private final Map<Integer, TaskGroup> map = new HashMap<>();
         private int index = 0;
         @Override
         public List<TaskGroup> findAll() {
@@ -112,14 +123,16 @@ class TaskGroupServiceTest {
             return false;
         }
 
-        @Override
-        public boolean existsByDoneIsFalseAndGroup_Id(Integer id) {
-            return false;
-        }
+
 
         @Override
         public List<Task> findAllById(Integer id) {
             return null;
+        }
+
+        @Override
+        public boolean existsByDoneIsFalseAndId(Integer id) {
+            return false;
         }
     }
 

@@ -91,7 +91,7 @@ class ProjectServiceTest {
         //and
         TaskConfigurationProperties mocProperties = mockConfiguration(true);
         InMemoryGroupRepository inMemoryGroupRepo = inMemoryGroupRepository();
-        var serviceWithInMemRepo = dummyGroupService(inMemoryGroupRepo);
+        var serviceWithInMemRepo = dummyGroupService(inMemoryGroupRepo,null);
         int countBeforeCall = inMemoryGroupRepo.count();
         //system under test
         var toTest = new ProjectService(mockRepository, inMemoryGroupRepository(),mocProperties,serviceWithInMemRepo);
@@ -105,8 +105,8 @@ class ProjectServiceTest {
 
     }
 
-    private TaskGroupService dummyGroupService(InMemoryGroupRepository inMemoryGroupRepo) {
-        return new TaskGroupService(inMemoryGroupRepo);
+    private TaskGroupService dummyGroupService(InMemoryGroupRepository inMemoryGroupRepo, TaskRepository taskRepository) {
+        return new TaskGroupService(inMemoryGroupRepo,taskRepository);
     }
 
     private Project projectWith(String projectDescription, Set<Integer> daysToDeadline){
@@ -130,7 +130,7 @@ class ProjectServiceTest {
 
     private static class InMemoryGroupRepository implements TaskGroupRepository {
 
-        private Map<Integer, TaskGroup> map = new HashMap<>();
+        private final Map<Integer, TaskGroup> map = new HashMap<>();
         private int index = 0;
 
         public int count(){
@@ -170,14 +170,16 @@ class ProjectServiceTest {
                     anyMatch(group -> group.getProject() != null && group.getProject().getId() == projectId);
         }
 
-        @Override
-        public boolean existsByDoneIsFalseAndGroup_Id(Integer id) {
-            return false;
-        }
+
 
         @Override
         public List<Task> findAllById(Integer id) {
             return null;
+        }
+
+        @Override
+        public boolean existsByDoneIsFalseAndId(Integer id) {
+            return false;
         }
     }
 

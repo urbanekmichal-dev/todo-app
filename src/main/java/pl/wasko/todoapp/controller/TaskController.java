@@ -80,4 +80,9 @@ public class TaskController {
         return ResponseEntity.ok(taskRepository.findByDone(state));
     }
 
+//    @GetMapping("/today")
+//    ResponseEntity<List<Task>> readTasksForToday(){
+//        return ResponseEntity.ok(taskRepository.);
+//    }
+
 }
